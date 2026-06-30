@@ -303,10 +303,13 @@ local function spawnLastLocation()
         heading = QBX.PlayerData.position.w
     }) end)
 
+    local insideMeta = QBX.PlayerData.metadata.inside
+    if insideMeta.property_id then
+        TriggerServerEvent('ps-housing:server:enterProperty', tostring(insideMeta.property_id))
+    end
+
     TriggerServerEvent('QBCore:Server:OnPlayerLoaded')
     TriggerEvent('QBCore:Client:OnPlayerLoaded')
-    TriggerServerEvent('qb-houses:server:SetInsideMeta', 0, false)
-    TriggerServerEvent('qb-apartments:server:SetInsideMeta', 0, 0, false)
 
     while not IsScreenFadedIn() do
         Wait(0)
@@ -346,7 +349,7 @@ local function createCharacter(cid)
         spawnDefault()
     else
         if config.characters.startingApartment then
-            TriggerEvent('apartments:client:setupSpawnUI', newData)
+            TriggerEvent('apartments:client:setupSpawnUI')
         else
             TriggerEvent('qbx_core:client:spawnNoApartments')
         end
